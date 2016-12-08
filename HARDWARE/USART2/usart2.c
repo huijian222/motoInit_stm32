@@ -17,7 +17,7 @@ void uart2_init(u32 pclk2,u32 bound)
 	temp=(float)(pclk2*1000000)/(bound*16);//得到USARTDIV
 	mantissa=temp;				 //得到整数部分
 	fraction=(temp-mantissa)*16; //得到小数部分	 
-  mantissa<<=4;
+    mantissa<<=4;
 	mantissa+=fraction; 
 	RCC->APB2ENR|=1<<2;   //使能PORTA口时钟  
 	RCC->APB1ENR|=1<<17;  //使能串口时钟 
@@ -56,46 +56,42 @@ void USART2_IRQHandler(void) {
     if(USART2->SR&(1<<5)) {   //接收到数据
         res=USART2->DR;                            
     }
-    if(RxState==0&&res==0xAA)           //半双工的接受方式在 串口中断中接受 ，但是不能在串口的中，
-    {
-        
+    if(res == 0x0C) {
+        Pwm_Unable = 1;
+    }
+    if(res == 0x0A) {
+        Pwm_Unable = 0;
+    }
+    if(RxState==0&&res==0xAA) {           //半双工的接受方式在 串口中断中接受 ，但是不能在串口的中，
         RxState=1;
         RxBuffer[0]=res;				
     }
-    else if(RxState==1&&res==0xAF)
-    {
-        
+    else if(RxState==1&&res==0xAF) {
         RxState=2;
         RxBuffer[1]=res;
     }
-    else if(RxState==2&&res>0&&res<0XF1)
-    {
-        
+    else if(RxState==2&&res>0&&res<0XF1) {
         RxState=3;
         RxBuffer[2]=res;
-        
     }
-    else if(RxState==3&&res<50)
-    {
+    else if(RxState==3&&res<50) {
         RxState=4;
         RxBuffer[3]=res;
         _data_len = res;
         _data_cnt = 0;
     }
-    else if(RxState==4&&_data_len>0)
-    {
+    else if(RxState==4&&_data_len>0) {
         _data_len--;
         RxBuffer[4+_data_cnt++]=res;
         if(_data_len==0)
         RxState = 5;								
     }
-    else if(RxState==5)
-    {
+    else if(RxState==5) {
         RxState = 0;
         RxBuffer[4+_data_cnt]=res;
-        Data_Receive_Anl(RxBuffer,_data_cnt+5);
-       						
+        Data_Receive_Anl(RxBuffer,_data_cnt+5);				
     }
-    else
-    {RxState = 0; }				
+    else {
+        RxState = 0; 
+    }				
 }

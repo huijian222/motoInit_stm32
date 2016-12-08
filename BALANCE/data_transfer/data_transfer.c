@@ -12,9 +12,7 @@ U8 data_to_send[40],FLAG_RETURN;
 返回  值：无
 作    者：赖金榜
 **************************************************************************/
-void Data_Receive_Anl(U8 *data_buf,U8 num)
-{
-
+void Data_Receive_Anl(U8 *data_buf,U8 num) {
 //	S16 rc_value_temp;
 	U8 sum = 0,i=0;
 	for( i=0;i<(num-1);i++)sum += *(data_buf+i);
@@ -43,7 +41,6 @@ void Data_Receive_Anl(U8 *data_buf,U8 num)
 	}
 	if(*(data_buf+2)==0X12)								//PID3
 	{
-        //data_Sata_3 = 1;	
         PID_PID_2.Kp = (float)((int)(*(data_buf+4)<<8)|*(data_buf+5))/100;
         PID_PID_2.Ki = (float)((int)(*(data_buf+6)<<8)|*(data_buf+7))/10000;
         PID_PID_2.Kd = (float)((int)(*(data_buf+8)<<8)|*(data_buf+9))/1000;
@@ -107,7 +104,6 @@ void Data_Receive_Anl(U8 *data_buf,U8 num)
         向上位机发送 PID2 数据
                                                     */
 			FLAG_RETURN = 1;
-            Pwm_Unable = 1;
 	}
 	Data_Send_Check(sum);
 }
@@ -117,9 +113,7 @@ void Data_Receive_Anl(U8 *data_buf,U8 num)
 返回  值：无
 作    者：赖金榜
 **************************************************************************/
-void Data_Send_Senser(float sv,float pv,float tv, float av)
-{
-
+void Data_Send_Senser(float sv,float pv,float tv, float av) {
 	U8 _cnt=0,i=0,sum=0;
 	data_to_send[_cnt++]=0xAA;
 	data_to_send[_cnt++]=0xAA;
@@ -192,8 +186,7 @@ void Data_Send_Mpu6050(void)
 返回  值：无
 作    者：赖金榜
 **************************************************************************/
-void Data_Send_Status(void)
-{
+void Data_Send_Status(void) {
 	u8 _cnt=0;
     u8 i=0;
     vs16 _temp;	
@@ -203,7 +196,6 @@ void Data_Send_Status(void)
 	data_to_send[_cnt++]=0xAA;
 	data_to_send[_cnt++]=0x01;
 	data_to_send[_cnt++]=0;
-
 	_temp = (int)(Roll*100);
 	data_to_send[_cnt++]=BYTE1(_temp);
 	data_to_send[_cnt++]=BYTE0(_temp);
@@ -221,19 +213,14 @@ void Data_Send_Status(void)
 	data_to_send[_cnt++]=BYTE2(_temp2);
 	data_to_send[_cnt++]=BYTE1(_temp2);
 	data_to_send[_cnt++]=BYTE0(_temp2);
-		
 	//if(Rc_C.ARMED==0)		
     //data_to_send[_cnt++]=0xA0;	
 	//else if(Rc_C.ARMED==1)		
     data_to_send[_cnt++]=0xA1;
-	
 	data_to_send[3] = _cnt-4;
-	
-
 	for(;i<_cnt;i++)
 		sum += data_to_send[i];
 	data_to_send[_cnt++]=sum;
-
 	PrintString1(data_to_send,_cnt);
 }
 
@@ -243,7 +230,7 @@ void Data_Send_Status(void)
 返回  值：无
 作    者：赖金榜
 **************************************************************************/
-void Data_Send_PID2(void){
+void Data_Send_PID2(void) {
 	unsigned char _cnt=0;
 	unsigned int _temp;
 	unsigned char sum = 0;  //此处BYTE1 与 BYTE0 颠倒是因为在STM32中编译器的问题 同上函数 
@@ -297,13 +284,13 @@ void Data_Send_Check(U8 check) {
 	data_to_send[1]=0xAA;
 	data_to_send[2]=0xF0;
 	data_to_send[3]=3;
-  data_to_send[4]=0xBA;
+    data_to_send[4]=0xBA;
 	data_to_send[5]=00;	
 	data_to_send[6]=check;//BYTE0(check);
 	for( i=0;i<7;i++)
 		sum += data_to_send[i];
 	data_to_send[7]=sum;
-  data_to_send_ok=1;
+    data_to_send_ok=1;
 }
 /**************************************************************************
 函数功能：向匿名上位机发送  所有数据  如果不需要发送某样数据 直接在此函数 注释掉 即可

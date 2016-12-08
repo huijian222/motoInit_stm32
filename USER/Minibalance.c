@@ -24,7 +24,7 @@ int main(void) {
     MPU6050_initialize();           //=====MPU6050初始化	
 	DMP_Init();                     //初始化DMP     
     PID_init();
-//    Timer1_Init(49,7199);           //=====5MS进一次中断服务函数
+//  Timer1_Init(49,7199);           //=====5MS进一次中断服务函数
 	while(1) {  
      	if(Way_Angle==1) {                    //DMP没有涉及到严格的时序问题，在主函数读取  
             Read_DMP();                      //===读取角速度和倾角
