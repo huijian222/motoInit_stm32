@@ -3,13 +3,12 @@
 #include "data_transfer.h"
 #include "pid.h"
 
-
 u8 Way_Angle=1;                             //获取角度的算法，1:DMP2：卡尔曼 可以改成3 即互补滤波，
 u8 Flag_Show=1,Flag_Stop=1;                 //显示标志位 启停标志位
 int Temperature;                            //显示温度
 int Moto1,Moto2,Moto3,Moto4;               //电机PWM变量 应是Motor的 向Moto致敬	
+
 int main(void) { 
-    
 	Stm32_Clock_Init(9);            //系统时钟设置
 	delay_init(72);                 //延时初始化 
 	JTAG_Set(JTAG_SWD_DISABLE);     //=====关闭JTAG接口
@@ -27,19 +26,14 @@ int main(void) {
     PID_init();
 //    Timer1_Init(49,7199);           //=====5MS进一次中断服务函数
 	while(1) {  
-//        
-     	if(Way_Angle==1) {                    //DMP没有涉及到严格的时序问题，在主函数读取
-               
+     	if(Way_Angle==1) {                    //DMP没有涉及到严格的时序问题，在主函数读取  
             Read_DMP();                      //===读取角速度和倾角
         }  
         if(Flag_Stop==1) {//使用OLED显示屏和PC端串口调试助手
-
             Way_Angle=1;//使用DMP
             Temperature=Read_Temperature();  //===读取MPU6050内置温度传感器数据，近似表示主板温度。	
             oled_show(); //===显示屏打开
             send_Data_To_Host((float)Pwm_Unable,(float)Moto2,(float)Moto3,(float)Moto4);
-//            printf("X轴倾角%f  Y轴倾角%f   \r\n",Pitch,Roll);
-            delay_ms(10);
         }	
 	} 
 }
