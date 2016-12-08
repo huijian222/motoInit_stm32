@@ -1,7 +1,7 @@
 #include "control.h"	
 #include "filter.h"	
+#include "data_transfer.h"
 #define PI 3.14159265
-
 int timer1_flag = 0;
 /**************************************************************************
 作者：Mini Balance 
@@ -19,16 +19,17 @@ void TIM1_UP_IRQHandler(void) {
 	if(TIM1->SR&0X0001) {//5ms定时中断
  
 		TIM1->SR&=~(1<<0);                                       //===清除定时器1中断标志位		 
-  		//Led_Flash(400);                                          //===LED闪烁;	      
+  		//Led_Flash(400);                                          //===LED闪烁;	        
 			//Set_Pwm(2000,2000,2000,2000);
+
 //			Key();                                                  //===扫描按键状态
-// 			Moto1=2000-5*Pitch+gyro[1]*8/100  -5*Roll+gyro[0]*8/100  ;//平衡的PD控制 可自行加入Z轴P控制抑制自旋 
-//			Moto2=2000+5*Pitch-gyro[1]*8/100  +5*Roll-gyro[0]*8/100  ;////////////// 
-//			Moto3=2000-5*Pitch+gyro[1]*8/100  +5*Roll-gyro[0]*8/100  ;////////////// 
-//			Moto4=2000+5*Pitch-gyro[1]*8/100  -5*Roll+gyro[0]*8/100  ;////////////// 
-//   		Xianfu_Pwm();                                            //===PWM限幅
+ 			Moto1=250-5*Pitch+gyro[1]*8/400  -5*Roll+gyro[0]*8/400  ;//平衡的PD控制 可自行加入Z轴P控制抑制自旋 
+			Moto2=250+5*Pitch-gyro[1]*8/400  +5*Roll-gyro[0]*8/400  ;////////////// 
+			Moto3=250-5*Pitch+gyro[1]*8/400  +5*Roll-gyro[0]*8/400  ;////////////// 
+			Moto4=250+5*Pitch-gyro[1]*8/400  -5*Roll+gyro[0]*8/400  ;////////////// 
+            Xianfu_Pwm();                                            //===PWM限幅
 //      if(Turn_Off()==0)                   //===如果不存在异常
-// 			Set_Pwm(Moto1,Moto2,Moto3,Moto4);                        //===赋值给PWM寄存器    		
+ 			Set_Pwm(Moto1,Moto2,Moto3,Moto4);                        //===赋值给PWM寄存器    		
       //  timer1_flag++;
     //    timer1_flag > 2000 ? Set_Pwm(3500,3500,3500,3500) : Set_Pwm(120,120,120,120); 
 	}       
@@ -36,17 +37,24 @@ void TIM1_UP_IRQHandler(void) {
 
 
 /**************************************************************************
-函数功能：赋值给PWM寄存器
+函数功能：赋值给PWM寄存器     0.5ms - 1ms 之间  入门参数 PWM 值在 0~500 之间 
 入口参数：PWM
 返回  值：无
 作    者：Mini Balance
 **************************************************************************/
 void Set_Pwm(int moto1,int moto2,int moto3,int moto4) {
-    
-    PWMA=2000 - myabs(moto1);
-    PWMB=2000 - myabs(moto2);	
-    PWMC=2000 - myabs(moto3);
-    PWMD=2000 - myabs(moto4);	
+    if(Pwm_Unable == 1) {
+        PWMA=2000 - myabs(500);
+        PWMB=2000 - myabs(500);	
+        PWMC=2000 - myabs(500);
+        PWMD=2000 - myabs(500);	    
+    } else {
+        PWMA=2000 - myabs(moto1 + 500);
+        PWMB=2000 - myabs(moto2 + 500);	
+        PWMC=2000 - myabs(moto3 + 500);
+        PWMD=2000 - myabs(moto4 + 500);	
+    }
+
 }
 
 /**************************************************************************
@@ -57,7 +65,7 @@ void Set_Pwm(int moto1,int moto2,int moto3,int moto4) {
 **************************************************************************/
 void Xianfu_Pwm(void)
 {	
-	  int Amplitude=4000; 
+	  int Amplitude=500; 
     if(Moto1<0) Moto1=0;	
 		if(Moto1>Amplitude)  Moto1=Amplitude;	
 	  if(Moto2<0) Moto2=0;	
@@ -113,3 +121,18 @@ void Key(void)
 //	if(tmp==2)Flag_Show=~Flag_Show;
 }
 
+/**************************************************************************
+函数功能：初始化四轴电调
+入口参数：无
+返回  值：无
+作者：赖金榜
+**************************************************************************/
+void initMoto(void) { //遥控给到最高2MS 嘀嘀嘀 给最低 1ms 滴 然后就可以飞了
+    
+    Set_Pwm(500,500,500,500);  //设置PWM周期为250HZ 一个周期为4MS 因为PWM周期为2000 所以设置1000 即 PWM高电平2MS
+    delay_ms(1800);   //低延迟可能电调检测不到
+    delay_ms(1800);
+    Set_Pwm(0,0,0,0); //500的理由同上 一个周期4MS 500/2000 即0.5MS 设置延迟防止无法检测到
+    delay_ms(1000);
+//  Set_Pwm(150,150,150,150);    
+}

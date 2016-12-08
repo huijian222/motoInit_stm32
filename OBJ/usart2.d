@@ -30,3 +30,4 @@
 ..\obj\usart2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\usart2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 ..\obj\usart2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+..\obj\usart2.o: ..\BALANCE\data_transfer\data_transfer.h

@@ -12,5 +12,6 @@ void Set_Pwm(int moto1,int moto2,int moto3,int moto4);
 void Xianfu_Pwm(void);
 u8 Turn_Off(void);
 int myabs(int a);
+void initMoto(void);
 void Key(void);
 #endif

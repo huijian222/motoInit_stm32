@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD</Define>
               <Undefine></Undefine>
-              <IncludePath>..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\KEY;..\HARDWARE\OLED;..\HARDWARE\ADC;..\HARDWARE\TIMER;..\HARDWARE\MOTOR;..\BALANCE\CONTROL;..\HARDWARE\ENCODER;..\HARDWARE\IIC;..\BALANCE\CONTROL;..\BALANCE\DataScope_DP;..\BALANCE\DMP;..\BALANCE\filter;..\BALANCE\MPU6050;..\BALANCE\show;..\BALANCE\controls;..\HARDWARE\NRF24L01;..\HARDWARE\SPI;..\HARDWARE\USART2</IncludePath>
+              <IncludePath>..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\KEY;..\HARDWARE\OLED;..\HARDWARE\ADC;..\HARDWARE\TIMER;..\HARDWARE\MOTOR;..\BALANCE\CONTROL;..\HARDWARE\ENCODER;..\HARDWARE\IIC;..\BALANCE\CONTROL;..\BALANCE\DataScope_DP;..\BALANCE\DMP;..\BALANCE\filter;..\BALANCE\MPU6050;..\BALANCE\show;..\BALANCE\controls;..\HARDWARE\NRF24L01;..\HARDWARE\SPI;..\HARDWARE\USART2;..\BALANCE\data_transfer;..\BALANCE\PID</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -542,6 +542,16 @@
               <FileName>show.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BALANCE\show\show.c</FilePath>
+            </File>
+            <File>
+              <FileName>data_transfer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BALANCE\data_transfer\data_transfer.c</FilePath>
+            </File>
+            <File>
+              <FileName>pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BALANCE\PID\pid.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -4,5 +4,7 @@
 extern u8 Usart3_Receive;
 void uart2_init(u32 pclk2,u32 bound);
 void USART2_IRQHandler(void);
+void usart2_send(u8 data);
+void PrintString1(unsigned char *puts,unsigned char _cnt);
 #endif
 

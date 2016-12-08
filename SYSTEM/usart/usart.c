@@ -1,6 +1,9 @@
-#include "usart.h"	  
-
-
+#include "usart.h"	
+#include "usart2.h"
+#include "data_transfer.h"
+//#define USART_REC_LEN            200 
+//u8 RxBuffer[USART_REC_LEN]; //数组最大为USART_REC_LEN 
+//u16 RxState=0;       //结合搜状态标记
 //加入以下代码,支持printf函数,而不需要选择use MicroLIB	  
 #if 1
 #pragma import(__use_no_semihosting)             
@@ -65,5 +68,69 @@ void uart_init(u32 pclk2,u32 bound)
 	//波特率设置
  	USART1->BRR=mantissa; // 波特率设置	 
 	USART1->CR1|=0X200C;  //1位停止,无校验位.
-
+    USART1->CR1|=1<<8;    //PE中断使能
+	USART1->CR1|=1<<5;    //接收缓冲区非空中断使能
+    MY_NVIC_Init(1,1,USART1_IRQn,1);//组2，最低优先级 
 }
+
+//void PrintString1(unsigned char *puts,unsigned char _cnt)		//发送一串字符串
+//{	
+//	unsigned char i=0;
+//	do{usart1_send(*(puts+i));i=i+1;}while((i)!= _cnt);
+//}
+///**************************************************************************
+//函数功能：串口1接收中断
+//入口参数：无
+//返回  值：无
+//**************************************************************************/
+//void USART1_IRQHandler(void) {
+//    u8 res;
+//    static u8 _data_len = 0,_data_cnt = 0;
+
+//    if(USART1->SR&(1<<5)) {   //接收到数据
+//Led_Flash(400);
+//        res=USART1->DR;                            
+//    }
+//    if(RxState==0&&res==0xAA)           //半双工的接受方式在 串口中断中接受 ，但是不能在串口的中，
+//    {
+//        
+//        RxState=1;
+//        RxBuffer[0]=res;				
+//    }
+//    else if(RxState==1&&res==0xAF)
+//    {
+//        
+//        RxState=2;
+//        RxBuffer[1]=res;
+//    }
+//    else if(RxState==2&&res>0&&res<0XF1)
+//    {
+//        
+//        RxState=3;
+//        RxBuffer[2]=res;
+//        
+//    }
+//    else if(RxState==3&&res<50)
+//    {
+//        RxState=4;
+//        RxBuffer[3]=res;
+//        _data_len = res;
+//        _data_cnt = 0;
+//    }
+//    else if(RxState==4&&_data_len>0)
+//    {
+//        _data_len--;
+//        RxBuffer[4+_data_cnt++]=res;
+//        if(_data_len==0)
+//        RxState = 5;								
+//    }
+//    else if(RxState==5)
+//    {
+//        RxState = 0;
+//        RxBuffer[4+_data_cnt]=res;
+//        Data_Receive_Anl(RxBuffer,_data_cnt+5);
+//       						
+//    }
+//    else
+//    {RxState = 0; }				
+//}

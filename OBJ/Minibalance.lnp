@@ -22,6 +22,8 @@
 "..\obj\filter.o"
 "..\obj\mpu6050.o"
 "..\obj\show.o"
+"..\obj\data_transfer.o"
+"..\obj\pid.o"
 --strict --scatter "..\OBJ\Minibalance.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

@@ -30,3 +30,5 @@
 ..\obj\minibalance.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 ..\obj\minibalance.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 ..\obj\minibalance.o: ..\BALANCE\CONTROL\control.h
+..\obj\minibalance.o: ..\BALANCE\data_transfer\data_transfer.h
+..\obj\minibalance.o: ..\BALANCE\PID\pid.h

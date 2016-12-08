@@ -31,3 +31,4 @@
 ..\obj\control.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 ..\obj\control.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 ..\obj\control.o: ..\BALANCE\filter\filter.h
+..\obj\control.o: ..\BALANCE\data_transfer\data_transfer.h
